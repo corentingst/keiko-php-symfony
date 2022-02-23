@@ -1,0 +1,29 @@
+version: "3.4"
+
+services:
+  php:
+    image: php-backend
+    ports:
+      - "80:80"
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+      target: backend_php
+      args:
+        # Update this line if you want to install XDebug. XDebug MUST be deactivated in production environment.
+        - INSTALL_XDEBUG=false
+
+    # command: ["/usr/local/bin/wait-for-postgres.sh", "db", "/usr/local/bin/docker-entrypoint", "php-fpm"]
+    # Comment out these volumes in production
+    volumes:
+      - ./backend:/srv/api:rw,cached
+      - ./docker/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+      # If you develop on Linux, uncomment the following line to use a bind-mounted host directory instead
+      # - ./backend/var:/srv/api/var:rw
+    environment:
+      - serverName=PHPSTORM
+    extra_hosts:
+      host.docker.internal: host-gateway
+
+volumes:
+  db-data: {}

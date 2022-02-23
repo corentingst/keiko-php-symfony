@@ -1,0 +1,6 @@
+/.env
+.idea
+!.gitkeep
+*.log
+.DS_Store
+.php-cs-fixer.cache

@@ -11,7 +11,7 @@ services:
       target: backend_php
       args:
         # Update this line if you want to install XDebug. XDebug MUST be deactivated in production environment.
-        - INSTALL_XDEBUG=false
+        - INSTALL_XDEBUG=true
 
     # command: ["/usr/local/bin/wait-for-postgres.sh", "db", "/usr/local/bin/docker-entrypoint", "php-fpm"]
     # Comment out these volumes in production

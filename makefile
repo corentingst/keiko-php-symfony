@@ -1,5 +1,3 @@
-# Retrieve the IP of the local machine inside the project docker network
-GATEWAY_IP := $(shell docker inspect $(notdir $(shell pwd))_default --format '{{(index .IPAM.Config 0).Gateway}}')
 
 .DEFAULT_GOAL := help
 help:
@@ -26,10 +24,6 @@ backend_stop: ## Stop backend
 .PHONY: backend_test
 phpunit: ## Run PHPUnit
 	@docker-compose exec php bin/phpunit --configuration phpunit.xml.dist --testsuite Functional tests
-
-.PHONY: backend_test_debug
-phpunit_debug: ## Run PHPUnit with debug enabled
-	@docker-compose exec -e XDEBUG_CONFIG="remote_host=$(GATEWAY_IP)" php bin/phpunit --configuration phpunit.xml.dist --testsuite Functional tests
 
 .PHONY: php-cs-fixer
 php-cs-fixer: ## Run PHP CS Fixer

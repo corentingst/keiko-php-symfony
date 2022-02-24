@@ -2,7 +2,8 @@ version: "3.4"
 
 services:
   php:
-    image: php-backend
+    container_name: php-backend
+    image: php-backend-image
     ports:
       - "80:80"
     build:

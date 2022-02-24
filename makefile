@@ -6,10 +6,6 @@ help:
 ## Dev commands
 .PHONY: install
 install: ## Install project
-	make backend_build
-
-.PHONY: backend_build
-backend_build: ## Build docker image
 	@docker-compose build
 
 .PHONY: backend_start

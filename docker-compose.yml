@@ -22,7 +22,7 @@ services:
       # If you develop on Linux, uncomment the following line to use a bind-mounted host directory instead
       # - ./backend/var:/srv/api/var:rw
     environment:
-      - serverName=PHPSTORM
+      - PHP_IDE_CONFIG="serverName=PHPSTORM"
     extra_hosts:
-      host.docker.internal: host-gateway
+      - "host.docker.internal:host-gateway"
 

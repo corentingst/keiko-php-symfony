@@ -92,6 +92,7 @@ RUN set -eux; \
 ARG INSTALL_XDEBUG=false
 RUN if [ "$INSTALL_XDEBUG" = "true" ] ; then \
 	apk add --no-cache $PHPIZE_DEPS \
+	&& apk add --update linux-headers \
 	&& pecl install xdebug \
 	&& docker-php-ext-enable xdebug \
 	&& apk del $PHPIZE_DEPS \

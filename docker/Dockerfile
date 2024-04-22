@@ -31,6 +31,7 @@ RUN set -eux; \
 	zip \
 	zlib-dev \
 	libpng-dev \
+    libpq-dev \
 	; \
 	\
 	docker-php-ext-install -j$(nproc) \
@@ -38,6 +39,7 @@ RUN set -eux; \
 	mysqli \
 	pdo \
 	pdo_mysql \
+    pdo_pgsql \
 	zip \
 	gd \
 	; \
@@ -49,6 +51,7 @@ RUN set -eux; \
 	apcu \
 	opcache \
 	pdo_mysql \
+    pdo_pgsql \
 	gd \
 	; \
 	\

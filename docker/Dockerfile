@@ -1,13 +1,14 @@
 # the different stages of this Dockerfile are meant to be built into separate images
 # https://docs.docker.com/compose/compose-file/#target
 
-ARG PHP_VERSION=8.0
+ARG PHP_VERSION=8.1
 ARG NODE_VERSION=16
 
 # PHP + Nginx
 FROM php:${PHP_VERSION}-fpm-alpine AS backend_php
 
 # persistent / runtime deps
+
 RUN apk add --no-cache \
 	acl \
 	fcgi \
@@ -83,6 +84,7 @@ COPY docker/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
 WORKDIR /srv/api
 
 # prevent the reinstallation of vendors at every changes in the source code
+
 COPY ./backend/composer.json  ./backend/composer.lock ./
 RUN set -eux; \
 	composer install --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress; \

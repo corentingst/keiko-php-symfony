@@ -13,6 +13,8 @@ services:
       args:
         # Update this line if you want to install XDebug. XDebug MUST be deactivated in production environment.
         - INSTALL_XDEBUG=true
+    depends_on:
+      - database
 
     # command: ["/usr/local/bin/wait-for-postgres.sh", "db", "/usr/local/bin/docker-entrypoint", "php-fpm"]
     # Comment out these volumes in production
@@ -22,7 +24,27 @@ services:
       # If you develop on Linux, uncomment the following line to use a bind-mounted host directory instead
       # - ./backend/var:/srv/api/var:rw
     environment:
-      - PHP_IDE_CONFIG=serverName=phpstorm-server # You need to set this as the server name in phpstorm
+      - serverName=PHPSTORM
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      host.docker.internal: host-gateway
 
+  ###> doctrine/doctrine-bundle ###
+  database:
+    image: postgres:${POSTGRES_VERSION:-13}-alpine
+    environment:
+      POSTGRES_DB: kezakodb
+      # You should definitely change the password in production and never use hard coded values like this...This is KEIKO !
+      POSTGRES_PASSWORD: kezakopwd
+      POSTGRES_USER: kezakodbuser
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data:rw
+      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
+      # - ./docker/db/data:/var/lib/postgresql/data:rw
+###< doctrine/doctrine-bundle ###
+
+volumes:
+  ###> doctrine/doctrine-bundle ###
+  db-data:
+###< doctrine/doctrine-bundle ###

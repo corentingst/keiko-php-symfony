@@ -37,3 +37,7 @@ phpinsights: ## Run phpinsights
 .PHONY: sh
 sh: ## Open sh on php container
 	@docker-compose exec php sh
+
+.PHONY: generate-jwt-token
+generate-jwt-token: ## Generate JWT Token for admin@citeo.com
+	@docker-compose exec php bin/console lexik:jwt:generate-token admin@citeo.com

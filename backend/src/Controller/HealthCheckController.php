@@ -13,8 +13,9 @@ class HealthCheckController extends AbstractController
     #[Route('/health-check', methods: ['GET'])]
     public function healthCheck(): Response
     {
-        var_dump(php_ini_loaded_file(), php_ini_scanned_files());
-
-        return new Response();
+        $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->connect();
+        $connected = $em->getConnection()->isConnected();
+        return new Response("Is connected: " .$connected);
     }
 }

@@ -51,6 +51,4 @@ class HelloWorldController extends AbstractController {
         $allParams_string = json_encode($allAttributes);
         return new Response("Route name: {$routeName}, route parameters: {$routeParams_string}, all params: {$allParams_string}");
     }
-
-
 }

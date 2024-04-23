@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\DTO\Tune;
 use App\Repository\TuneEntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -18,6 +19,14 @@ class TuneEntity
 
     #[ORM\Column(length: 255)]
     private ?string $author = null;
+
+    public static function fromTune(Tune $tune): self
+    {
+        $entity = new self();
+        $entity->title = $tune->getTitle();
+        $entity->author = $tune->getAuthor();
+        return $entity;
+    }
 
     public function getId(): ?int
     {

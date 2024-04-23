@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Components\Tunes\TuneAccessor;
+use App\Components\Tunes\TuneCreator;
+use App\Components\Tunes\TuneDeleter;
+use App\Components\Tunes\TuneLister;
 use App\DTO\Tune;
-use App\Service\TuneService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,15 +15,13 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class TuneController extends AbstractController
 {
-    private SerializerInterface $serializer;
-    private TuneService $tuneService;
-
-
-    public function __construct(SerializerInterface $serializer, TuneService $tuneService)
-    {
-        $this->serializer = $serializer;
-        $this->tuneService = $tuneService;
-    }
+    public function __construct(
+        public SerializerInterface $serializer,
+        public TuneAccessor $tuneAccessor,
+        public TuneCreator $tuneCreator,
+        public TuneDeleter $tuneDeleter,
+        public TuneLister $tuneLister
+    ){}
 
     #[Route('/tune', methods:['GET'])]
     public function getTune(Request $request): Response
@@ -29,41 +29,31 @@ class TuneController extends AbstractController
         if ($request->query->has("filter")){
             $filter = $request->query->get("filter");
         } else {$filter='';}
-//        if (filter is in params ok) else set filter = ''
 
-        $tunesList = $this->tuneService->listTunes($filter);
+        $tunesList = $this->tuneLister->listTunes($filter);
         return new Response($this->serializer->serialize($tunesList, 'json'));
     }
 
     #[Route('/tune/{tuneId}', methods:['GET'])]
     public function getTuneID(string $tuneId): Response
     {
-        $tune = $this->tuneService->getTune($tuneId);
-//
-//        $data = [
-//            'id' => 1,
-//            'title' => 'Tune 1',
-//            'author'=>'Artist 1',
-//        ];
-//
-//        $jsonData = $this->serializer->serialize($data, 'json');
-//        return new Response($jsonData);#json_encode($jsonData));
-
+        $tune = $this->tuneAccessor->getTune($tuneId);
         return new Response($this->serializer->serialize($tune, 'json'));
     }
 
     #[Route('/tune', methods:['POST'])]
     public function postTune(Request $request): Response
     {
-//        $tuneToBeCreated = json_decode($request->getContent(), true);
-        $tuneToBeCreated = new Tune(1, 'Tune 1', 'Artist 1');
-        $tune = $this->tuneService->createTune($tuneToBeCreated);
+        $tuneToBeCreated = new Tune();
+        $tuneToBeCreated->setTitle('Title');
+        $tuneToBeCreated->setAuthor('Djadja');
+        $tune = $this->tuneCreator->createTune($tuneToBeCreated);
         return new Response($this->serializer->serialize($tune, 'json'));
     }
     #[Route('/tune/{tuneId}', methods:['DELETE'])]
     public function deleteTuneID(string $tuneId): Response
     {
-        $this->tuneService->deleteTune($tuneId);
+        $this->tuneDeleter->deleteTune($tuneId);
         return new Response();
     }
 }

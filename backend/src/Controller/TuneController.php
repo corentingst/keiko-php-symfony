@@ -45,12 +45,17 @@ class TuneController extends AbstractController
     public function postTune(Request $request): Response
     {
         $requestContent = json_decode($request->getContent(), true);
-        $tuneToBeCreated = new Tune();
-        $tuneToBeCreated->setTitle($requestContent["title"]);
-        $tuneToBeCreated->setAuthor($requestContent["author"]);
-        $tune = $this->tuneCreator->createTune($tuneToBeCreated);
-        return new Response($this->serializer->serialize($tune, 'json'));
+        if (isset($requestContent['title']) and isset($requestContent['author']))
+        {
+            $tuneToBeCreated = new Tune();
+            $tuneToBeCreated->setTitle($requestContent["title"]);
+            $tuneToBeCreated->setAuthor($requestContent["author"]);
+            $tune = $this->tuneCreator->createTune($tuneToBeCreated);
+            return new Response($this->serializer->serialize($tune, 'json'));
+        }
+        return new Response("Le format de la requête n'est pas respecté");
     }
+
     #[Route('/tune/{tuneId}', methods:['DELETE'])]
     public function deleteTuneID(string $tuneId): Response
     {

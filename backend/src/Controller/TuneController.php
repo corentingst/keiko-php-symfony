@@ -24,9 +24,14 @@ class TuneController extends AbstractController
     }
 
     #[Route('/tune', methods:['GET'])]
-    public function getTune(): Response
+    public function getTune(Request $request): Response
     {
-        $tunesList = $this->tuneService->listTunes();
+        if ($request->query->has("filter")){
+            $filter = $request->query->get("filter");
+        } else {$filter='';}
+//        if (filter is in params ok) else set filter = ''
+
+        $tunesList = $this->tuneService->listTunes($filter);
         return new Response($this->serializer->serialize($tunesList, 'json'));
     }
 

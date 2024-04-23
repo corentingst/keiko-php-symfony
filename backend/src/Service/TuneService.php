@@ -52,8 +52,8 @@ class TuneService
         $this->entityManager->remove($tuneToDelete);
         $this->entityManager->flush();
     }
-    public function  listTunes(): array {
-        $tuneList = $this->repository->createQueryBuilder('p')->getQuery()->execute();
+    public function  listTunes(string $filter): array {
+        $tuneList = $this->repository->createQueryBuilder('p')->where("p.title LIKE '%{$filter}%'")->getQuery()->execute();
         return ([$tuneList]);
     }
 }

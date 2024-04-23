@@ -44,9 +44,10 @@ class TuneController extends AbstractController
     #[Route('/tune', methods:['POST'])]
     public function postTune(Request $request): Response
     {
+        $requestContent = json_decode($request->getContent(), true);
         $tuneToBeCreated = new Tune();
-        $tuneToBeCreated->setTitle('Title');
-        $tuneToBeCreated->setAuthor('Djadja');
+        $tuneToBeCreated->setTitle($requestContent["title"]);
+        $tuneToBeCreated->setAuthor($requestContent["author"]);
         $tune = $this->tuneCreator->createTune($tuneToBeCreated);
         return new Response($this->serializer->serialize($tune, 'json'));
     }

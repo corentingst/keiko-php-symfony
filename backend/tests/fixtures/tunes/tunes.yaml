@@ -1,0 +1,10 @@
+App\Entity\TuneEntity:
+  a_sng_1:
+    title: 'Blabla'
+    author: 'Cindy'
+  thriller_mj:
+    title: 'Thriller'
+    author: 'Michael Jackson'
+  thunderstruck_acdc:
+    title: 'Thunderstruck'
+    author: 'AC-DC'

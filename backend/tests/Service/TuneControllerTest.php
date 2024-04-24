@@ -16,7 +16,7 @@ class TuneControllerTest extends WebTestCase
     {
         $client = static::createClient();
         FixtureAwareCaseTrait::loadFixturesWithContainer(static::getContainer(), 'tunes');
-        echo('OKAY');
+//        echo('OKAY');
         $crawler = $client->request('GET', '/api/tune');
         $this->assertResponseIsSuccessful();
     }

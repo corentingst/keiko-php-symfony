@@ -4,11 +4,14 @@ namespace App\Entity;
 
 use App\DTO\Album;
 use App\Repository\AlbumEntityRepository;
+
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AlbumEntityRepository::class)]
 class AlbumEntity
 {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -20,7 +23,14 @@ class AlbumEntity
     #[ORM\Column(length: 255)]
     private ?string $issueDate = null;
 
-    public static function fromAlbumToCreate(Album $albumToCreate): AlbumEntity{
+    #[ORM\ManyToMany(targetEntity: 'TuneEntity')]
+    #[ORM\JoinTable(name: 'albums_tunes')]
+    #[ORM\JoinColumn(name: "album_id", referencedColumnName: "id")]
+    #[ORM\InverseJoinColumn(name: "tune_id", referencedColumnName: "id")]
+    private Collection $tunes;
+
+    public static function fromAlbumToCreate(Album $albumToCreate): AlbumEntity
+    {
         $entity = new self();
         $entity->title = $albumToCreate->getTitle();
         $entity->issueDate = $albumToCreate->getIssueDate();
@@ -52,6 +62,18 @@ class AlbumEntity
     {
         $this->issueDate = $issueDate;
 
+        return $this;
+    }
+
+    public function addTune(TuneEntity $tune): self
+    {
+        $this->tunes->add($tune);
+        return $this;
+    }
+
+    public function removeTune(TuneEntity $tune): self
+    {
+        $this->tunes->removeElement($tune);
         return $this;
     }
 }

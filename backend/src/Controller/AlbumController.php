@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Components\Albums\TuneAdder;
 use App\Components\Albums\AlbumCreator;
 use App\Components\Albums\AlbumLister;
 use App\Components\Albums\AlbumRetriever;
+use App\Components\Tunes\TuneAccessor;
 use App\DTO\Album;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,9 +18,11 @@ class AlbumController extends AbstractController
 {
     public function __construct(
         private SerializerInterface $serializer,
-        private AlbumCreator $albumCreator,
-        private AlbumLister $albumLister,
-        private AlbumRetriever $albumRetriever,
+        private AlbumCreator        $albumCreator,
+        private AlbumLister         $albumLister,
+        private AlbumRetriever      $albumRetriever,
+        private TuneAdder           $tuneAdder,
+        private TuneAccessor $tuneAccessor,
     ){}
     #[Route('/album', methods: ['POST'])]
     public function postAlbum(Request $request): Response {
@@ -51,4 +55,13 @@ class AlbumController extends AbstractController
         return new Response($this->serializer->serialize($album, 'json'));
     }
 
+    #[Route('/album/{albumId}/tune/{tuneId}', methods: ['POST'])]
+    public function postAlbumTune(string $albumId, string $tuneId): Response
+    {
+//        $album = $this->albumRetriever->getAlbum($albumId);
+//        $tune = $this->tuneAccessor->getTune($tuneId);
+//        $this->tuneAdder->addTuneToAlbum($tune, $album);
+        $this->tuneAdder->addTuneToAlbum($tuneId, $albumId);
+        return new Response("Le titre {$tuneId} a bien été ajouté à l'album {$albumId}");
+    }
 }

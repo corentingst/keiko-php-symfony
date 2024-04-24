@@ -3,6 +3,7 @@
 namespace App\Components\Tunes;
 
 use App\DTO\Tune;
+use App\Entity\TuneEntity;
 use App\Repository\TuneEntityRepository;
 
 class TuneAccessor
@@ -13,12 +14,12 @@ class TuneAccessor
     {
         $this->repository = $repository;
     }
-    public function  getTune(String $tuneId): Tune {
-        // fetch entity
-        $entity = $this->repository->find($tuneId);
-
-        // return Tune object
-        return Tune::fromTuneEntity($entity);
+    public function  getTuneEntity(String $tuneId): TuneEntity
+    {
+        return $this->repository->find($tuneId);
     }
-
+    public function getTune(String $tuneId): Tune
+    {
+        return Tune::fromTuneEntity($this->getTuneEntity($tuneId));
+    }
 }

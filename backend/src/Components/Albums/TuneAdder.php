@@ -2,8 +2,7 @@
 
 namespace App\Components\Albums;
 
-use App\DTO\Album;
-use App\DTO\Tune;
+use App\Components\Tunes\TuneAccessor;
 use App\Repository\AlbumEntityRepository;
 use App\Repository\TuneEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -14,12 +13,13 @@ class TuneAdder
         private AlbumEntityRepository $albumRepository,
         private TuneEntityRepository $tuneRepository,
         private EntityManagerInterface $entityManager,
+        private AlbumRetriever $albumRetriever,
+        private TuneAccessor $tuneAccessor,
     ){}
     public function addTuneToAlbum(string $tuneId, string $albumId): void
     {
-        $albumEntity = $this->albumRepository->find($albumId);
-        $tuneEntity = $this->tuneRepository->find($tuneId);
-        // a changer en utilisant un service retrieve entity
+        $albumEntity = $this->albumRetriever->getAlbumEntity($albumId);
+        $tuneEntity = $this->tuneAccessor->getTuneEntity($tuneId);
 
         $albumEntity->addTune($tuneEntity);
         $this->entityManager->persist($albumEntity);

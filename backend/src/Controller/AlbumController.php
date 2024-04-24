@@ -58,6 +58,7 @@ class AlbumController extends AbstractController
     #[Route('/album/{albumId}/tune/{tuneId}', methods: ['POST'])]
     public function postAlbumTune(string $albumId, string $tuneId): Response
     {
+        // rajouter conditions pour avoir des requetes qui fonctionnent dans tous les cas
 //        $album = $this->albumRetriever->getAlbum($albumId);
 //        $tune = $this->tuneAccessor->getTune($tuneId);
 //        $this->tuneAdder->addTuneToAlbum($tune, $album);

@@ -3,6 +3,7 @@
 namespace App\Components\Albums;
 
 use App\DTO\Album;
+use App\Entity\AlbumEntity;
 use App\Repository\AlbumEntityRepository;
 
 class AlbumRetriever
@@ -10,12 +11,12 @@ class AlbumRetriever
     public function __construct(
         private AlbumEntityRepository $repository,
     ){}
-    public function getAlbum(string $albumId): Album {
-
-        // fetch entity
-        $entity = $this->repository->find($albumId);
-
-        // return Tune object
-        return Album::fromAlbumEntity($entity);
+    public function getAlbumEntity(string $albumId): AlbumEntity
+    {
+        return $this->repository->find($albumId);
+    }
+    public function getAlbum(string $albumId): Album
+    {
+        return Album::fromAlbumEntity($this->getAlbumEntity($albumId));
     }
 }

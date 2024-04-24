@@ -20,7 +20,14 @@ class AlbumEntityRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, AlbumEntity::class);
     }
-
+    public function filterByTitle($filterValue): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where("p.title LIKE '%{$filterValue}%'")
+            ->getQuery()
+            ->execute()
+            ;
+    }
 //    /**
 //     * @return AlbumEntity[] Returns an array of AlbumEntity objects
 //     */

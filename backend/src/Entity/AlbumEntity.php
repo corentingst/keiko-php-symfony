@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\DTO\Album;
 use App\Repository\AlbumEntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -19,6 +20,12 @@ class AlbumEntity
     #[ORM\Column(length: 255)]
     private ?string $issueDate = null;
 
+    public static function fromAlbumToCreate(Album $albumToCreate): AlbumEntity{
+        $entity = new self();
+        $entity->title = $albumToCreate->getTitle();
+        $entity->issueDate = $albumToCreate->getIssueDate();
+        return $entity;
+    }
     public function getId(): ?int
     {
         return $this->id;

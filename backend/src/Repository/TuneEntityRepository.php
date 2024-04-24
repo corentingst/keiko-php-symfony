@@ -21,20 +21,17 @@ class TuneEntityRepository extends ServiceEntityRepository
         parent::__construct($registry, TuneEntity::class);
     }
 
-//    /**
-//     * @return TuneEntity[] Returns an array of TuneEntity objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('t.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return TuneEntity[] Returns an array of TuneEntity objects
+     */
+    public function filterByTitle($filterValue): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where("p.title LIKE '%{$filterValue}%'")
+            ->getQuery()
+            ->execute()
+        ;
+    }
 
 //    public function findOneBySomeField($value): ?TuneEntity
 //    {

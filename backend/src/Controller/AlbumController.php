@@ -6,6 +6,7 @@ use App\Components\Albums\TuneAdder;
 use App\Components\Albums\AlbumCreator;
 use App\Components\Albums\AlbumLister;
 use App\Components\Albums\AlbumRetriever;
+use App\Components\Albums\TuneRemover;
 use App\Components\Tunes\TuneAccessor;
 use App\DTO\Album;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,7 +23,8 @@ class AlbumController extends AbstractController
         private AlbumLister         $albumLister,
         private AlbumRetriever      $albumRetriever,
         private TuneAdder           $tuneAdder,
-        private TuneAccessor $tuneAccessor,
+        private TuneAccessor        $tuneAccessor,
+        private TuneRemover         $tuneRemover,
     ){}
     #[Route('/album', methods: ['POST'])]
     public function postAlbum(Request $request): Response {
@@ -56,7 +58,7 @@ class AlbumController extends AbstractController
     }
 
     #[Route('/album/{albumId}/tune/{tuneId}', methods: ['POST'])]
-    public function postAlbumTune(string $albumId, string $tuneId): Response
+    public function addTuneToAlbum(string $albumId, string $tuneId): Response
     {
         // rajouter conditions pour avoir des requetes qui fonctionnent dans tous les cas
 //        $album = $this->albumRetriever->getAlbum($albumId);
@@ -65,4 +67,12 @@ class AlbumController extends AbstractController
         $this->tuneAdder->addTuneToAlbum($tuneId, $albumId);
         return new Response("Le titre {$tuneId} a bien été ajouté à l'album {$albumId}");
     }
+    #[Route('/album/{albumId}/tune/{tuneId}', methods: ['DELETE'])]
+    public function deleteTuneFromAlbum(string $albumId, string $tuneId): Response
+    {
+        // rajouter conditions pour avoir des requetes qui fonctionnent dans tous les cas
+        $this->tuneRemover->removeTuneFromAlbum($tuneId, $albumId);
+        return new Response("Le titre {$tuneId} a bien été retiré à l'album {$albumId}");
+    }
+
 }

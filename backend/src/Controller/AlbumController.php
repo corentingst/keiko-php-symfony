@@ -10,6 +10,7 @@ use App\Components\Albums\TuneRemover;
 use App\Components\Tunes\TuneAccessor;
 use App\DTO\Album;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -53,8 +54,11 @@ class AlbumController extends AbstractController
     #[Route('/album/{albumId}', methods: ['GET'])]
     public function getAlbumInfo(Request $request, string $albumId): Response
     {
-        $album = $this->albumRetriever->getAlbum($albumId);
-        return new Response($this->serializer->serialize($album, 'json'));
+        $albumEntity = $this->albumRetriever->getAlbumEntity($albumId);
+        $tuneCollection = $albumEntity->getTunes();
+        $albumJSON = $this->serializer->serialize($albumEntity, 'json');
+        $collectionJSON = $this->serializer->serialize($tuneCollection, 'json');
+        return new Response($albumJSON);
     }
 
     #[Route('/album/{albumId}/tune/{tuneId}', methods: ['POST'])]

@@ -76,4 +76,12 @@ class AlbumEntity
         $this->tunes->removeElement($tune);
         return $this;
     }
+
+
+    public function getTunes(): Collection
+    {
+        return($this->tunes);
+    }
+
+
 }
